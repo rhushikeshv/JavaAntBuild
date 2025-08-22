@@ -1,0 +1,59 @@
+<project name="MyApp" default="jar" basedir=".">
+
+    <!-- Static prefix version -->
+    <property name="version.prefix" value="1.0.0"/>
+
+    <!-- Paths -->
+    <property name="src.dir" value="src"/>
+    <property name="build.dir" value="build"/>
+    <property name="dist.dir" value="dist"/>
+    <property name="lib.dir" value="lib"/>
+
+    <!-- Setup classpath -->
+    <path id="classpath">
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+    </path>
+
+    <!-- Init -->
+    <target name="init">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+    </target>
+
+    <!-- Generate version and build.properties -->
+    <target name="generate-build-info" depends="init">
+        <!-- Dynamic timestamp for versioning -->
+        <tstamp>
+            <format property="build.date" pattern="yyyy-MM-dd HH:mm:ss"/>
+            <format property="version.timestamp" pattern="yyyyMMdd.HHmmss"/>
+        </tstamp>
+
+        <!-- Combine version prefix + timestamp -->
+        <property name="version" value="${version.prefix}-${version.timestamp}"/>
+
+        <!-- Write build.properties -->
+        <echo file="${build.dir}/build.properties">
+            build.date=${build.date}
+            version=${version}
+        </echo>
+    </target>
+
+    <!-- Compile -->
+    <target name="compile" depends="generate-build-info">
+        <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false" classpathref="classpath"/>
+        <copy file="${build.dir}/build.properties" todir="${build.dir}"/>
+    </target>
+
+    <!-- Create JAR with static name -->
+    <target name="jar" depends="compile">
+        <jar destfile="${dist.dir}/MyApp.jar" basedir="${build.dir}"/>
+        <echo message="Built JAR: dist/MyApp.jar (version=${version})"/>
+    </target>
+
+    <!-- Clean -->
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+
+</project>
