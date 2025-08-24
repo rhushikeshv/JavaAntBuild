@@ -31,10 +31,26 @@
         <!-- Combine version prefix + timestamp -->
         <property name="version" value="${version.prefix}-${version.timestamp}"/>
 
+        <!-- Use command-line provided tag.name, if available -->
+        <condition property="git.tag" value="${tag.name}">
+            <isset property="tag.name"/>
+        </condition>
+
+        <!-- Fallback if not provided -->
+        <condition property="git.tag" value="no-tag">
+            <not>
+                <isset property="git.tag"/>
+            </not>
+        </condition>
+
+
+
+
         <!-- Write build.properties -->
         <echo file="${build.dir}/build.properties">
             build.date=${build.date}
             version=${version}
+            git.tag=${git.tag}
         </echo>
     </target>
 
@@ -47,7 +63,7 @@
     <!-- Create JAR with static name -->
     <target name="jar" depends="compile">
         <jar destfile="${dist.dir}/MyApp.jar" basedir="${build.dir}"/>
-        <echo message="Built JAR: dist/MyApp.jar (version=${version})"/>
+        <echo message="Built JAR: dist/MyApp.jar (version=${version}, tag=${git.tag})"/>
     </target>
 
     <!-- Clean -->

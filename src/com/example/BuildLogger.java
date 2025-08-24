@@ -10,11 +10,13 @@ public class BuildLogger {
             prop.load(input);
             String buildDate = prop.getProperty("build.date", "unknown");
             String version = prop.getProperty("version", "unknown");
+            String tag = prop.getProperty("git.tag", "unknown");
 
             System.out.println("************************************************************");
             System.out.println("*                                                          *");
-            System.out.println("*                Version   : " + version);
-            System.out.println("*                Build Date: " + buildDate);
+            System.out.println("*                Version    : " + version);
+            System.out.println("*                Build Date : " + buildDate);
+            System.out.println("*                Tag        : " + tag);
             System.out.println("*                                                          *");
             System.out.println("************************************************************");
 
