@@ -29,7 +29,7 @@ jobs:
         run: ant -version
 
       - name: Build ZIP with Ant
-        run: ant zip
+        run: ant package
 
       - name: Create Git tag
         run: |
