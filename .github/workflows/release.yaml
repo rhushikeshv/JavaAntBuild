@@ -24,7 +24,7 @@ jobs:
         run: ant -version
 
       - name: Build ZIP with Ant
-        run: ant zip
+        run: ant package
 
       - name: Upload release ZIP to GitHub Releases
         uses: softprops/action-gh-release@v2
