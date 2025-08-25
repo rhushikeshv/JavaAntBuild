@@ -1,10 +1,7 @@
-
 name: Build and Release with Ant
 
 on:
-  push:
-    tags:
-      - 'v*'  # Trigger only on version tag pushes
+  workflow_dispatch:  # Manual trigger from GitHub UI
 
 jobs:
   build-and-release:
