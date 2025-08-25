@@ -14,10 +14,14 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          distribution: 'temurin'     # REQUIRED: Specifies the JDK distribution
+          java-version: '17'          # Adjust if you're using a different version
 
       - name: Install Apache Ant
         run: sudo apt-get update && sudo apt-get install -y ant
+
+      - name: Verify Ant installation
+        run: ant -version
 
       - name: Build ZIP with Ant
         run: ant zip
