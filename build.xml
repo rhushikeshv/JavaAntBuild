@@ -76,6 +76,7 @@
     <target name="clean">
         <delete dir="${build.dir}"/>
         <delete dir="${dist.dir}"/>
+        <echo message="clean up completed !!!"/>
     </target>
 
 </project>
