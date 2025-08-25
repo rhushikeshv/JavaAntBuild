@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       tag_name:
-        description: 'Git tag for the release (e.g. v1.0.0)'
+        description: 'Git tag for the release (must already exist, e.g. v1.0.0)'
         required: true
         type: string
 
@@ -30,13 +30,6 @@ jobs:
 
       - name: Build ZIP with Ant
         run: ant package
-
-      - name: Create Git tag
-        run: |
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
-          git tag ${{ inputs.tag_name }}
-          git push origin ${{ inputs.tag_name }}
 
       - name: Upload release ZIP to GitHub Releases
         uses: softprops/action-gh-release@v2
