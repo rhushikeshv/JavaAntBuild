@@ -1,7 +1,12 @@
 name: Build and Release with Ant
 
 on:
-  workflow_dispatch:  # Manual trigger from GitHub UI
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Git tag for the release (e.g. v1.0.0)'
+        required: true
+        type: string
 
 jobs:
   build-and-release:
@@ -14,8 +19,8 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'     # REQUIRED: Specifies the JDK distribution
-          java-version: '17'          # Adjust if you're using a different version
+          distribution: 'temurin'
+          java-version: '17'
 
       - name: Install Apache Ant
         run: sudo apt-get update && sudo apt-get install -y ant
@@ -24,11 +29,19 @@ jobs:
         run: ant -version
 
       - name: Build ZIP with Ant
-        run: ant package
+        run: ant zip
+
+      - name: Create Git tag
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git tag ${{ inputs.tag_name }}
+          git push origin ${{ inputs.tag_name }}
 
       - name: Upload release ZIP to GitHub Releases
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ inputs.tag_name }}
           files: dist/*.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
