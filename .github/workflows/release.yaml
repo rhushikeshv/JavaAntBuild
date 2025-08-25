@@ -16,8 +16,8 @@ jobs:
         with:
           java-version: '17'
 
-      - name: Set up Apache Ant
-        uses: actions/setup-ant@v1
+      - name: Install Apache Ant
+        run: sudo apt-get update && sudo apt-get install -y ant
 
       - name: Build ZIP with Ant
         run: ant zip
