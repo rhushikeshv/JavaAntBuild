@@ -1,4 +1,4 @@
-<project name="MyApp" default="jar" basedir=".">
+<project name="MyApp" default="zip" basedir=".">
 
     <!-- Static prefix version -->
     <property name="version.prefix" value="1.0.0"/>
@@ -43,9 +43,6 @@
             </not>
         </condition>
 
-
-
-
         <!-- Write build.properties -->
         <echo file="${build.dir}/build.properties">
             build.date=${build.date}
@@ -61,9 +58,18 @@
     </target>
 
     <!-- Create JAR with static name -->
-    <target name="jar" depends="compile">
+    <target name="jar" depends="clean,compile">
         <jar destfile="${dist.dir}/MyApp.jar" basedir="${build.dir}"/>
         <echo message="Built JAR: dist/MyApp.jar (version=${version}, tag=${git.tag})"/>
+    </target>
+
+    <!-- Create ZIP of JAR with version and timestamp -->
+    <target name="package" depends="jar">
+        <mkdir dir="${dist.dir}"/>
+        <zip destfile="${dist.dir}/MyApp-${version}.zip">
+            <fileset file="${dist.dir}/MyApp.jar"/>
+        </zip>
+        <echo message="Created ZIP: ${dist.dir}/MyApp-${version}.zip"/>
     </target>
 
     <!-- Clean -->
